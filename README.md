@@ -19,3 +19,11 @@ Hue : 7
 Saturation : 140
 Value : 235
 
+Exercise 3:
+
+There seems to be little changes when the kernel size is changed. However, it seems like as you increase the kernel size, it will find any white pixel and then turn the neighboring pixels to white. Kernel size of 5 by 5 seems to work "better" for the gaussian noise and salt-and-pepper noise.
+
+Exercise 4:
+
+For binary threshold, it converts the image into black and white. Basically, if the intensity of the pixel is higher than a certain threshold, then the new pixel is set to the maximum value, otherwise the pixels are set to 0. The disadvantage of this threhold is that it is not that usefl for images with strong illumination and also there are limitations in the way it categorize the pixels. It only takes into 2 conditions to make the final decision about the pixels in an image. Band threshold is the opposite of the binary threshold. If the intensity of the pixel is higher than a certain threshold, then the new pixel is set to 0, otherwise the pixels are set to maximum value. For the semi-threshold case, the image goes completely dark. In this case, the pixels that are below the threshold have been considered as object pixels, which makes the background brighter than the foreground. Adaptive threshold seems to calculate the threshold for a small regions of the image and get different thresholds for different regions of the same image. It is useful when we use it on images with varying or strong illumination. 
+
