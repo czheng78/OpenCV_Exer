@@ -1,3 +1,4 @@
+# Copyright 2017 Chuan Xing (Tommy) Zheng czheng78@bu.edu
 #!/usr/bin/python
 import numpy as np
 import cv2
@@ -20,23 +21,15 @@ def TemplateMatching(src, temp, stepsize): # src: source image, temp: template i
             corr = 0;
             # Calculate the mean and variance of source image pixel values inside window
             # ------------------ Put your code below ------------------ 
-            rows = temp.shape[0]
-            cols = temp.shape[1]
-            roi = src[i:i + rows, j:j + cols]
-            mean_s = np.mean(roi)
-            var_s = np.std(roi)
+            croppedsrc = src[i:(i+temp.shape[0]), j:(j+temp.shape[1])]
+            mean_src = np.mean(croppedsrc)
+            var_src = np.var(croppedsrc)
 
             # Calculate normalized correlation coefficient (NCC) between source and template
             # ------------------ Put your code below ------------------ 
-            num = 0
-            r_mean = r.mean()
-            r_var = r.var()
-            temp_mean = temp.mean()
-            temp_var = temp.var()
-            for k in range(0, rows):
-                for l in range(0, cols):
-                    num += (r[k, l] - r_mean) * (temp[k, l] - temp_mean)
-            corr = (1 / (rows * cols)) * (num / (r_var * temp_var))
+            for x in np.arange(0, temp.shape[0]):
+                for y in np.arange(0, temp.shape[1]):
+                    corr += 1/float(temp.shape[0]*temp.shape[1])*(temp[x,y]-mean_t)*(croppedsrc[x,y]-mean_s)/(var_t*var_src)
             
             if corr > max_corr:
                 max_corr = corr;
@@ -45,14 +38,14 @@ def TemplateMatching(src, temp, stepsize): # src: source image, temp: template i
 
 # load source and template images
 source_img = cv2.imread('source_img.jpg',0) # read image in grayscale
-temp = cv2.imread('template.jpg',0) # read image in grayscale
+temp = cv2.imread('template_img.jpg',0) # read image in grayscale
 location = TemplateMatching(source_img, temp, 20);
 print(location)
 match_img = cv2.cvtColor(source_img, cv2.COLOR_GRAY2RGB)
 
 # Draw a red rectangle on match_img to show the template matching result
 # ------------------ Put your code below ------------------ 
-cv2.rectangle(match_img, (location[1], location[0]), (location[1] + temp.shape[1], location[0] + temp.shape[0]), (0, 0, 255), 2)
+cv2.rectangle(match_img, (location[1], location[0]),(location[1]+temp.shape[1]-1, location[0]+temp.shape[0]-1),(255,0,0), 5)
 # Save the template matching result image (match_img)
 # ------------------ Put your code below ------------------ 
 cv2.imwrite('match_img.jpg', match_img)
